@@ -10,8 +10,8 @@
 (function() {
     var ormma = window.ormma = {};
 	var mraid = window.mraid = {};
-    console.log('init');
-	console.log(ormma);
+    console.log('ormma_class inited');
+
     // CONSTANTS ///////////////////////////////////////////////////////////////
     
     var STATES = ormma.STATES = {

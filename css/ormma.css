@@ -1,0 +1,7 @@
+#banner {position:absolute; left:0px; top:0px; }
+#closebanner {position:absolute; left:265px; top:-15px; display:none; }
+#panel {position:absolute; left:0px; top:0px; display:none; }
+#hotspot {position:absolute; left:75px; top:116px; }
+#ormma {position:absolute; left:50px; top:150px; display:none; }
+#close {position:absolute; left:250px; top:0px; }
+img {border:none; }

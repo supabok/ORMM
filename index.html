@@ -1,375 +1,61 @@
-
 <!DOCTYPE html>
 <html>
-<head>
-<title>Page Title</title>
-<!--<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.css" /> -->
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.min.js"></script>
-<!--<script type="text/javascript" src="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.js"></script> -->
-<script type="text/javascript" src="js/ormmaview-bridge.js"></script>
-<script type="text/javascript"src="js/ormma.js"></script>
-<script type="text/javascript" src="js/sample_2.js"></script>
+	<head>
+		<title>Page Title</title>
+		<!--<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.css" /> -->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.min.js"></script>
+		<!--<script type="text/javascript" src="http://code.jquery.com/mobile/1.0a3/jquery.mobile-1.0a3.min.js"></script> -->
+		<script type="text/javascript" src="js/ormmaview.js"></script>
+		<script type="text/javascript" src="js/ormma.js"></script>
+		<script type="text/javascript" src="js/ormma_init.js"></script>
+		<link rel="stylesheet" href="css/ormma.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+		<script language="javascript" type="text/javascript">
+			$(document).ready(function() {
 
+				ormmaview.addEventListener('ready', function() {
+					console.log('ormma ready');
+				});
 
-<!-- Setup our Javascript -->
-<script language="javascript">
-   // used to capture the value of resize events
-   var resizeText = "No Value";
+			});
 
-
-   /**
-    * Notifies the SDK that the default ad wishes to move to the expanded state.
-    *
-    * @requires Ormma
-    */
-   function expandAd() {
-		var pos = ormma.getDefaultPosition();
-          var size = ormma.getSize();
-          ormma.expand( { x: pos.x, 
-                          y: pos.y, 
-                                          width: size.width, 
-                                          height : size.height - pos.y});
-   }
-
-
-   /**
-    * Handles ORMMA errors.
-    *
-    * @param {evt} Event, the error event
-    *
-    * @requires Ormma
-    */
-   function handleErrorEvent( message, action ) {
-      var msg = "ORMMA ERROR ";
-          if ( action != null ) {
-             // error caused by an action       
-             msg += "caused by action '" + action + "', ";
-      }
-      msg += "Message: " + message;
-          alert( msg );
-   }
-
-
-   /**
-    * Handles Screen Size Changed Events.
-    *
-    * @param {evt} Event, the screen size changed event
-    *
-    * @requires Ormma
-    */
-   function handleKeyboardChangeEvent( open ) {
-      var msg = "Keyboard is now: ";
-      msg += ( open ) ? "OPEN" : "CLOSED";
-      //alert( msg );
-   }
-
-
-   /**
-    * Handles Screen Size Changed Events.
-    *
-    * @param {evt} Event, the screen size changed event
-    *
-    * @requires Ormma
-    */
-   function handleScreenSizeChangeEvent( width, height ) {
-      var msg = "Screen Size Changed to " + buildSizeText( width, height );;
-      //alert( msg );
-   }
-
-
-   /**
-    * Handles Size Changed Events.
-    *
-    * @param {evt} Event, the size changed event
-    *
-    * @requires Ormma
-    */
-   function handleSizeChangeEvent( width, height ) {
-      var msg = "Ad Size Changed to " + buildSizeText( width, height );;
-      //alert( msg );
-   }
-
-
-   /**
-    * Handles whenever the state changes.
-    *
-    * @requires Ormma
-    */
-   function handleStateChangeEvent( state ) {
-      var banner = document.getElementById( 'banner' );
-      var resizedad = document.getElementById( 'resizedad' );
-      var expandedad = document.getElementById( 'expandedad' );
-          if ( state === 'default' ) {
-             showDefault();
-      }
-          else if ( state === 'expanded' ) {
-             showExpanded();
-      }
-          else if ( state === 'resized' ) {
-             showResized();
-      }
-          else if ( state === 'hidden' ) {
-             showHidden();
-      }
-   }
-   
-   
-   /**
-    * Opens a new full screen browser.
-    *
-    * @requires Ormma
-        */
-   function openBrowser(destURL) {
-      ormma.open( destURL );
-   }
-
-
-   /**
-    * Handles notifications that the ORMMA SDK is fully open for business.
-    *
-    * @requires Ormma
-    */
-   function ORMMAReady() {
-      //  start listening for state changes
-      ormma.addEventListener( 'error', handleErrorEvent );
-      ormma.addEventListener( 'stateChange', handleStateChangeEvent );
-          showDefault();
-   }
-
-
-   /**
-    * Notifies the SDK that the default ad wishes to be resized.
-    *
-    * @requires Ormma
-    */
-   function resizeLarger() {
-          // add a special listener for size changes, to make sure it's firing
-      ormma.addEventListener( 'sizeChange', handleSizeChangeEvent );
-          ormma.resize( 320, 250 );
-   }
-
-
-   /**
-    * Notifies the SDK that the resized ad wishes to return to the default state.
-    *
-    * @requires Ormma
-    */
-   function resizeSmaller() {
-          ormma.close();
-   }
-   
-   
-   /**
-    * Causes the appropriate elements for the "default" state to be displayed.
-        *
-        * @requires: Ormma
-        */
-   function showDefault() {
-         banner.style.display = 'block';
-         resizedad.style.display = 'none';
-         expandedad.style.display = 'none';
-
-         // we only care about the size changed event if we're resizing
-         ormma.removeEventListener( 'sizeChange', handleSizeChangeEvent );
-         resizeText = "No Value";
-   }
-   
-   
-   /**
-    * Causes the appropriate elements for the "expanded" state to be displayed.
-        *
-        * @requires: Ormma
-        */
-   function showExpanded() {
-         banner.style.display = 'none';
-         resizedad.style.display = 'none';
-         expandedad.style.display = 'block';
-         updateExpandedAd();
-   }
-   
-   
-   
-   /**
-    * Causes the appropriate elements for the "resized" state to be displayed.
-        *
-        * @requires: Ormma
-        */
-   function showResized() {
-         banner.style.display = 'none';
-         resizedad.style.display = 'block';
-         expandedad.style.display = 'none';
-         updateResizedAd();
-   }
-
-
-   /**
-    * Notifies the SDK that the expanded ad wishes to return to the default state.
-    *
-    * @requires Ormma
-    */
-   function shrinkAd() {
-          ormma.close();
-   }
-
-
-   /**
-    * Helper that updates the contents of the expanded state.
-    *
-    * @requires Ormma
-    */
-   function updateExpandedAd() {
-   }
-
-
-   /**
-    * Helper Function to build a size text from the specified diminsions.
-    */
-   function buildSizeText( width, height ) {
-      var text = width;
-      text += " x ";
-      text += height;
-
-      return text;
-   }
-   
-   function clickToApp(destURL){
-                window.location = destURL;   
-   }
-        
-</script>
-
-<script language="javascript" type="text/javascript">
-                $(document).ready(function(){
-					//ormmaview.addEventListener('ready', function() {
-						console.log('ormma ready');
-					//})
-                });
-    </script>
-<!-- Define our styles -->
-<style>
-#banner {
-        position:absolute;
-        left:0px;
-        top:0px;
-        display:block;
-        background: #069;
-        height: 50px;
-        width: 320px;
-        padding: 0px;
-}
-#larger {
-        position:absolute;
-        left:65px;
-        top:13px;
-}
-#expand {
-        position:absolute;
-        left:285px;
-        top:10px;
-}
-#resizedad {
-        position:absolute;
-        left:0px;
-        top:0px;
-        display:none;
-        background: #9C0;
-        height: 480px;
-        width: 320px;
-}
-#resizedata {
-        position:absolute;
-        left:15px;
-        top:15px;
-}
-#smaller {
-        position:absolute;
-        left:285px;
-        top:5px;
-}
-#expandedad {
-        position:absolute;
-        left:0px;
-        top:0px;
-        display:none;
-        height: 480px;
-        width: 320px;
-}
-#expanddata {
-        position:absolute;
-        left:15px;
-        top:15px;
-}
-#shrink {
-        position:absolute;
-        left:285px;
-        top:10px;
-}
-img {
-        border:none
-}
-#ad {
-        font: .8em "Trebuchet MS", Arial, Helvetica, sans-serif;
-        color: #FFF
-}
-#ad #banner #bannercopy {
-        position: absolute;
-        left: 9px;
-        top: 10px;
-        color: #FFF;
-}
-#resizedlinks, #expandedlinks {
-        position: absolute;
-        left: 15px;
-        top: 63px;
-        width: 280px;
-        color:#FFF;
-}
-</style>
-</head>
-
-<body>
-	<div data-role="page" id="home">
-	
-		 <div data-role="header">
-			<h1>Header</h1>
-		 </div>
-		 
-		 <div data-role="content" id="contentDiv">
-		 <!-- The actual creative -->
-			<div id='ad'>
-			  <!-- The standard banner ad state (default state) -->
-			  <div id='banner'>
-				<div id="bannercopy"><b>320x50 Banner</b><br/>Test Expansion with Transparency</div>
-				<div id='expand'> <img src="http://s.imwx.com/ads/creatives/ormma/expand.png"
-						  alt="expand" onclick="expandAd();" /> </div>
-			  </div>
-			  <!-- The resized ad (resized state) -->
-			  <div id='resizedad'>
-			  </div>
-			  <!-- The expanded ad (expanded state) -->
-			  <div id='expandedad' align="center"> 
-			  <img src="http://s.imwx.com/ads/creatives/ormma/320x480.png" alt="expanded ad"/>
-				<div id='shrink'> <img src="http://s.imwx.com/ads/creatives/ormma/shrink.png"
-						  alt="close"
-						  onclick="shrinkAd();" /> </div>
-				<div id='expanddata' align="center"> AD is Expanded. </div>
-			<div id="expandedlinks"> 
-					  <p><a style="color:#09C;" href="http://www.weather.com">Open weather.com in standard browser</a><br><br />
-						<a style="color:#09C;" href="javascript:openBrowser('http://www.cnn.com')">Open CNN in Ormma Browser</a><br><br>
-							<a style="color:#09C;" href="mailto:example@example.com">Send an Email - dummy email</a><br/><br/>
-					  <a style="color:#09C;" href="tel:18002255288">Call AT&amp;T</a><br/><br/>
-					  <a style="color:#09C;" href="http://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=364252504&amp;mt=8">ClickToApp- TWC for iPad</a>  
-					  </p>
-					  
-				  </div>
-			  </div>
+		</script>
+	</head>
+	<body>
+		<div data-role="page" id="home">
+			
+			<div data-role="header">
+				<h1>Initial Ormma Tests</h1>
 			</div>
-		 </div>
-		 
-		 <div data-role="footer">
-			<h4>Footer</h4>
-		 </div>
-		 
-	</div>
-</body>
+			
+			<div data-role="content" id="contentDiv">
+				<!-- AD BEGINS HERE -->
+				<div id="adSpace" style="height:50px">
+					<div id='ad'>
+						<div id='banner'><img src="http://media.crispadvertising.com/adframework/1.2/components/img/300x50.gif" alt="banner advertisement" onclick="return(expand());" />
+						</div>
+						<div id='closebanner'><img src="http://media.crispadvertising.com/adframework/1.2/components/img/btn_close.gif" alt="" onclick="return(hide());" />
+						</div>
+						<div id='panel'>
+							<div id='background'><img src="http://media.crispadvertising.com/adframework/1.2/components/img/300x250.gif" alt="panel" />
+							</div>
+							<div id='hotspot'>
+								<a href="http://blog.ormma.org/" onclick="return(open(this.href));"><img src="http://ormma.googlecode.com/svn/trunk/AdSamples/OrmmaOneAd/small_ormma.gif" alt="ORMMA" /></a>
+							</div>
+							<div id='close'><img src="http://media.crispadvertising.com/adframework/1.2/components/img/btn_close.gif" alt="close" onclick="return(collapse());" />
+							</div>
+							<div id='ormma'>
+								Running in ORMMA compliant container.
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+				
+			<!-- footer -->
+			<div data-role="footer">
+				<h4>Footer Content</h4>
+			</div>
+			
+		</div>
+	</body>
 </html>

@@ -54,7 +54,7 @@ INFO No ORMMAReady callback found (timeout of 10000ms occurred), assume use of r
   
 (function() {
     var ormmaview = window.ormmaview = {};
-    
+    console.log('ormma_view started');
     // CONSTANTS ///////////////////////////////////////////////////////////////
     
     var STATES = ormmaview.STATES = {
